@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+  font-family: 'Roboto', Arial, sans-serif;
+  background-color: #f5f7fa;
+}
+
+h4 {
+  color: #1976d2;
+  font-weight: bold;
+}
+
+.card-content ul {
+  padding-left: 20px;
+  list-style-type: circle;
+}
+
+.tab-selector .MuiTab-root {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #555;
+}

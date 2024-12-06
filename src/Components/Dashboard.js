@@ -1,312 +1,232 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Card,
   CardContent,
   Grid,
   Typography,
-  Tooltip,
-  IconButton,
-  useTheme,
-  ThemeProvider,
-  createTheme,
-  CssBaseline,
+  Tabs,
+  Tab,
 } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip as RechartsTooltip,
-  Legend,
-  LineChart,
-  Line,
-  ResponsiveContainer,
-} from "recharts";
+import { FaCheckCircle, FaExclamationTriangle, FaLightbulb, FaBolt } from "react-icons/fa";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+
+// Predefined Data
+const kpiData = {
+  overallPerformance: 88,
+  topSubject: "Biology",
+  topSubjectSymbol: "🧬",
+  lowestSubject: "Physics",
+  lowestSubjectSymbol: "🔬",
+};
+
+const swotData = {
+  Physics: {
+    strengths: ["Strong Mechanics foundation", "Accurate problem-solving skills", "Quick in calculations"],
+    weaknesses: ["Struggles with time management", "Weak in Thermodynamics"],
+    opportunities: ["Master advanced Mechanics topics", "Participate in Physics Olympiads"],
+    threats: ["Inconsistent scores under time pressure", "Competition from peers in core subjects"],
+  },
+  Chemistry: {
+    strengths: ["Strong grasp of Periodic Table trends", "High accuracy in Organic Chemistry"],
+    weaknesses: ["Weak practical skills", "Confusion in reaction mechanisms"],
+    opportunities: ["Focus on lab experiments", "Participate in Chemistry workshops"],
+    threats: ["Low confidence in competitive exams", "Over-reliance on theoretical learning"],
+  },
+  Biology: {
+    strengths: ["Excellent knowledge of Genetics", "High diagram accuracy", "Quick understanding of Ecology"],
+    weaknesses: ["Weak in Plant Physiology", "Tends to skip Anatomy"],
+    opportunities: ["Focus on detailed Anatomy studies", "Leverage Genetics for research projects"],
+    threats: ["Dependency on rote learning", "Difficulties in handling large syllabus"],
+  },
+};
+
+const recommendations = {
+  Physics: ["Dedicate 30 minutes daily to Mechanics.", "Practice timed Thermodynamics problems.", "Review Newton's Laws weekly."],
+  Chemistry: ["Revise Periodic Trends weekly.", "Focus on reaction mechanisms.", "Improve confidence in practical problem-solving."],
+  Biology: ["Revise Genetics weekly.", "Focus on diagram-based questions.", "Master Plant Physiology concepts."],
+};
+
+const testTrendData = Array.from({ length: 25 }, (_, index) => ({
+  test: `Test ${index + 1}`,
+  Physics: 10 + index, // Simulated data trend
+  Chemistry: 10 + Math.min(index, 20),
+  Biology: 70 + Math.max(index - 5, 0),
+  Overall: (50 + index + (60 + Math.min(index, 20)) + (70 + Math.max(index - 5, 0))) / 3,
+}));
+
+const heatmapData = Array.from({ length: 25 }, (_, index) => ({
+  test: `Test ${index + 1}`,
+  Physics: index % 5 === 0 ? 40 : index % 5 === 1 ? 55 : index % 5 === 2 ? 65 : index % 5 === 3 ? 80 : 90,
+  Chemistry: index % 4 === 0 ? 45 : index % 4 === 1 ? 60 : index % 4 === 2 ? 75 : 85,
+  Biology: index % 6 === 0 ? 35 : index % 6 === 1 ? 50 : index % 6 === 2 ? 70 : index % 6 === 3 ? 65 : index % 6 === 4 ? 85 : 95,
+}));
+
+
+// Helper Function for Heatmap Color
+const getHeatmapColor = (value) => {
+  if (value >= 75) return `rgba(56, 142, 60, ${(value - 75) / 25 + 0.3})`; // Dark to Light Green
+  if (value >= 50) return `rgba(255, 235, 59, ${(value - 50) / 25 + 0.3})`; // Dark to Light Yellow
+  return `rgba(244, 67, 54, ${(50 - value) / 50 + 0.3})`; // Dark to Light Red
+};
 
 const Dashboard = () => {
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: "#1976d2",
-      },
-      secondary: {
-        main: "#ff9800",
-      },
-      background: {
-        default: "#dde6ee",
-      },
-    },
-    typography: {
-      fontFamily: "'Roboto', 'Arial', sans-serif",
-    },
-  });
+  const [selectedSubject, setSelectedSubject] = useState("Physics");
 
-  const testData = [
-    { subject: "Physics", accuracy: 68, improvementPercentage: 12 },
-    { subject: "Chemistry", accuracy: 80, improvementPercentage: 15 },
-    { subject: "Biology", accuracy: 87, improvementPercentage: 20 },
-  ];
-
-  const swotData = {
-    strengths: "High accuracy in Biology (87% in Genetics and Ecology).",
-    weaknesses: "Time management in Physics (Mechanics).",
-    opportunities: "Inorganic Chemistry improvement (72% → 80%).",
-    threats: "Inconsistent performance in time-constrained Mechanics questions.",
+  // Tab Change Handler
+  const handleTabChange = (event, newValue) => {
+    setSelectedSubject(newValue);
   };
 
-  const recommendations = [
-    { action: "Dedicate 30 minutes daily to Inorganic Chemistry as you consistently score below 70% in 'Periodic Table Trends' across 10 tests." },
-    { action: "Practice timed Mechanics problems as you take an average of 4.5 minutes on 'Newton's Laws of Motion' questions, exceeding the recommended 2 minutes." },
-    { action: "Revise Genetics weekly to maintain performance; you consistently make errors in Punnett square questions involving 'dihybrid crosses'." },
-    { action: "Review your approach to Thermodynamics problems; you repeatedly confuse equations for 'Work done by the system' and 'Work done on the system' in 15 of 20 tests." },
-  ];
-
-  const trendData = [
-    { test: 'Test 1', Physics: 60, Chemistry: 70, Biology: 85 },
-    { test: 'Test 2', Physics: 62, Chemistry: 72, Biology: 87 },
-    { test: 'Test 3', Physics: 58, Chemistry: 75, Biology: 88 },
-    { test: 'Test 4', Physics: 65, Chemistry: 77, Biology: 89 },
-    { test: 'Test 5', Physics: 63, Chemistry: 78, Biology: 90 },
-    { test: 'Test 6', Physics: 66, Chemistry: 80, Biology: 92 },
-    { test: 'Test 7', Physics: 67, Chemistry: 82, Biology: 91 },
-    { test: 'Test 8', Physics: 64, Chemistry: 79, Biology: 93 },
-    { test: 'Test 9', Physics: 68, Chemistry: 81, Biology: 94 },
-    { test: 'Test 10', Physics: 70, Chemistry: 83, Biology: 95 },
-  ];
-
-  const topicPerformanceData = [
-    { topic: "Mechanics", test1: 55, test2: 60, test3: 58, test4: 62, test5: 63 },
-    { topic: "Optics", test1: 70, test2: 67, test3: 72, test4: 75, test5: 73 },
-    { topic: "Inorganic", test1: 68, test2: 72, test3: 75, test4: 78, test5: 80 },
-    { topic: "Organic", test1: 70, test2: 73, test3: 77, test4: 80, test5: 82 },
-    { topic: "Genetics", test1: 85, test2: 87, test3: 89, test4: 92, test5: 94 },
-    { topic: "Ecology", test1: 88, test2: 90, test3: 92, test4: 94, test5: 95 },
-  ];
-
-  const generateHeatmapCellStyle = (value) => ({
-    textAlign: "center",
-    padding: "10px",
-    backgroundColor: value
-      ? `rgba(33, 150, 243, ${value / 100})` // Dynamically set based on the value (scaled 0-100)
-      : "#f5f5f5", // Default light gray for missing values
-    color: value > 50 ? "#fff" : "#000", // High values get white text for better contrast
-  });
-
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Box sx={{ p: 3, backgroundColor: theme.palette.background.default }}>
-        {/* Header */}
-        <Box sx={{ position: "relative", mb: 3 }}>
-          {/* Logo */}
-          <Box
-            component="img"
-            src="./undefined.png"
-            alt="Logo"
-            sx={{
-              width: 80,
-              height: 50,
-              borderRadius: "10%",
-              position: "absolute", // Allows the logo to stay in its own space
-              left: 0, // Keeps the logo aligned to the left
-            }}
-          />
+    <Box sx={{ padding: 3, backgroundColor: "#f5f7fa", minHeight: "100vh" }}>
+      {/* Header */}
+      <Typography variant="h4" sx={{ textAlign: "center", mb: 4, color: "#1976d2", fontWeight: "bold" }}>
+        AI-Powered Student Dashboard
+      </Typography>
 
-          {/* Centered Title */}
-          <Typography
-            variant="h4"
-            component="h1"
-            sx={{
-              textAlign: "center", // Ensures the title is centered
-            }}
-          >
-            AI-Powered Insight Dashboard
-          </Typography>
-        </Box>
+      {/* KPI Widgets */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        {/* Top Subject */}
+        <Grid item xs={12} sm={6}>
+          <Card sx={{ background: "linear-gradient(135deg, #e8f5e9, #c8e6c9)", borderLeft: "5px solid #4caf50" }}>
+            <CardContent sx={{ textAlign: "center" }}>
+              <Typography variant="h6">Top Subject</Typography>
+              <Typography variant="h5" sx={{ mt: 1, color: "#4caf50" }}>
+                {kpiData.topSubject} {kpiData.topSubjectSymbol}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
+        {/* Lowest Subject */}
+        <Grid item xs={12} sm={6}>
+          <Card sx={{ background: "linear-gradient(135deg, #fdecea, #f8bbd0)", borderLeft: "5px solid #e57373" }}>
+            <CardContent sx={{ textAlign: "center" }}>
+              <Typography variant="h6">Lowest Subject</Typography>
+              <Typography variant="h5" sx={{ mt: 1, color: "#e57373" }}>
+                {kpiData.lowestSubject} {kpiData.lowestSubjectSymbol}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
 
+      {/* Subject Selector Tabs */}
+      <Tabs value={selectedSubject} onChange={handleTabChange} sx={{ mt: 4, mb: 2 }} textColor="primary" indicatorColor="primary">
+        {Object.keys(swotData).map((subject) => (
+          <Tab key={subject} label={subject} value={subject} />
+        ))}
+      </Tabs>
 
-        <Grid container spacing={3}>
-          {/* KPI Overview */}
-          <Grid item xs={12} md={4}>
+      {/* SWOT Analysis */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        {["strengths", "weaknesses", "opportunities", "threats"].map((type) => (
+          <Grid item xs={12} sm={6} key={type}>
             <Card
-            sx={{
-              backgroundColor: "#ede7f7", // Light red
-              color: "#000000", // Dark red for text
-            }}
+              className={`swot-card ${type}`}
+              sx={{
+                background: type === "strengths" ? "#e8f5e9" : type === "weaknesses" ? "#fdecea" : type === "opportunities" ? "#e3f2fd" : "#fff9c4",
+                borderLeft: `5px solid ${type === "strengths" ? "#4caf50" : type === "weaknesses" ? "#e57373" : type === "opportunities" ? "#1976d2" : "#ffeb3b"}`,
+              }}
             >
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  KPI Overview
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Top Subject:</strong> Biology
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Weakest Subject:</strong> Physics
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Overall Improvement:</strong> 20%
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* SWOT Analysis */}
-          <Grid item xs={12} md={8}>
-            <Card
-            sx={{
-              backgroundColor: "#eaf7e7", // Light red
-              color: "#000000", // Dark red for text
-            }}
-            >
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  SWOT Analysis
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Strengths:</strong> {swotData.strengths}
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Weaknesses:</strong> {swotData.weaknesses}
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Opportunities:</strong> {swotData.opportunities}
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Threats:</strong> {swotData.threats}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Recommendations */}
-          <Grid item xs={12}>
-            <Card
-            sx={{
-              backgroundColor: "#faf7e8", // Light red
-              color: "#000000", // Dark red for text
-            }}
-            >
-            
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Recommendations
+                  {type.charAt(0).toUpperCase() + type.slice(1)}{" "}
+                  {type === "strengths" && <FaCheckCircle style={{ color: "#4caf50", marginLeft: 5 }} />}
+                  {type === "weaknesses" && <FaExclamationTriangle style={{ color: "#e57373", marginLeft: 5 }} />}
+                  {type === "opportunities" && <FaBolt style={{ color: "#1976d2", marginLeft: 5 }} />}
+                  {type === "threats" && <FaLightbulb style={{ color: "#ffeb3b", marginLeft: 5 }} />}
                 </Typography>
                 <ul>
-                  {recommendations.map((rec, index) => (
-                    <Typography component="li" variant="body1" key={index}>
-                      {rec.action}
-                    </Typography>
+                  {swotData[selectedSubject][type].map((item, idx) => (
+                    <li key={idx}>{item}</li>
                   ))}
                 </ul>
               </CardContent>
             </Card>
           </Grid>
+        ))}
+      </Grid>
 
-          {/* Performance Chart */}
-          <Grid item xs={12}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Performance Chart
-                </Typography>
-                <Box sx={{ height: 400 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={testData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="subject" />
-                      <YAxis />
-                      <RechartsTooltip />
-                      <Legend />
-                      <Bar dataKey="accuracy" fill={theme.palette.primary.main} />
-                      <Bar
-                        dataKey="improvementPercentage"
-                        fill={theme.palette.secondary.main}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
+      {/* Study Recommendations */}
+      <Card sx={{ mb: 4, background: "#fff9c4", borderLeft: "5px solid #ffc107" }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            <FaLightbulb color="yellow" style={{ marginRight: 8 }} />
+            Study Recommendations: {selectedSubject}
+          </Typography>
+          <ul>
+            {recommendations[selectedSubject].map((rec, index) => (
+              <Typography key={index} component="li">
+                {rec}
+              </Typography>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
 
-          {/* Performance Trend */}
-          <Grid item xs={12}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Performance Trend
-                </Typography>
-                <Box sx={{ height: 400 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={trendData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="test" />
-                      <YAxis />
-                      <RechartsTooltip />
-                      <Legend />
-                      <Line
-                        type="monotone"
-                        dataKey="Physics"
-                        stroke={theme.palette.primary.main}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="Chemistry"
-                        stroke={theme.palette.secondary.main}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="Biology"
-                        stroke="#ff5722"
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
+     <Card sx={{ mb: 4 }}>
+  <CardContent>
+    <Typography variant="h6" gutterBottom>
+      Combined Heatmap: Physics, Chemistry, Biology
+    </Typography>
+    <Box sx={{ display: "grid", gridTemplateColumns: "repeat(26, 1fr)", gap: "5px" }}>
+      {/* Y-Axis Header (Subjects) */}
+      <Box />
+      {heatmapData.map((_, index) => (
+        <Typography
+          key={`test-header-${index}`}
+          sx={{ textAlign: "center", fontWeight: "bold", padding: "5px" }}
+        >
+          Test {index + 1}
+        </Typography>
+      ))}
+      {/* Rows for Subjects */}
+      {["Physics", "Chemistry", "Biology"].map((subject, rowIndex) => (
+        <React.Fragment key={`row-${rowIndex}`}>
+          {/* Y-Axis Labels */}
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "5px",
+              textAlign: "center",
+            }}
+          >
+            {subject}
+          </Typography>
+          {/* Heatmap Cells */}
+          {heatmapData.map((row, columnIndex) => {
+            const value = row[subject];
+            return (
+              <Box
+                key={`cell-${rowIndex}-${columnIndex}`}
+                sx={{
+                  width: "35px",
+                  height: "35px",
+                  backgroundColor: getHeatmapColor(value),
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "14px",
+                  color: value >= 75 ? "#fff" : "#000", // High marks with white text for better contrast
+                  border: "1px solid #ddd",
+                }}
+              >
+                {value}
+              </Box>
+            );
+          })}
+        </React.Fragment>
+      ))}
+    </Box>
+  </CardContent>
+</Card>
 
-          {/* Heatmap */}
-          <Grid item xs={12}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Topic-Wise Performance (Heatmap)
-                </Typography>
-                <Box sx={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 1 }}>
-                  <Typography sx={{ fontWeight: "bold", textAlign: "center" }}>Topic</Typography>
-                  <Typography sx={{ fontWeight: "bold", textAlign: "center" }}>Test 1</Typography>
-                  <Typography sx={{ fontWeight: "bold", textAlign: "center" }}>Test 2</Typography>
-                  <Typography sx={{ fontWeight: "bold", textAlign: "center" }}>Test 3</Typography>
-                  <Typography sx={{ fontWeight: "bold", textAlign: "center" }}>Test 4</Typography>
-                  <Typography sx={{ fontWeight: "bold", textAlign: "center" }}>Test 5</Typography>
-                  {topicPerformanceData.map((row, rowIndex) => (
-                    <>
-                      <Typography key={`topic-${rowIndex}`} sx={{ fontWeight: "bold" }}>
-                        {row.topic}
-                      </Typography>
-                      {["test1", "test2", "test3", "test4", "test5"].map((testKey, colIndex) => (
-                        <Box
-                          key={`cell-${rowIndex}-${colIndex}`}
-                          sx={generateHeatmapCellStyle(row[testKey])}
-                        >
-                          {row[testKey] || "-"}
-                        </Box>
-                      ))}
-                    </>
-                  ))}
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Box>
-    </ThemeProvider>
+    </Box>
   );
 };
 
