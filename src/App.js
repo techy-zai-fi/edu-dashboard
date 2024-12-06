@@ -1,12 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
-import Dashboard from './Components/Dashboard';
+import React from 'react';
+import { ThemeProvider } from 'styled-components';
+import { GlobalStyles } from './styles/globalStyles';
+import { theme } from './styles/theme';
+import Dashboard from './pages/Dashboard/Dashboard';
 
 function App() {
   return (
-    <div>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
       <Dashboard />
-    </div>
+    </ThemeProvider>
   );
 }
 
