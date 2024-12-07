@@ -3,7 +3,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import Header from "../../components/Header/Header";
 import CourseCard from "../../components/CourseCard/CourseCard";
 import { ProgressChart } from "../../components/Charts/LineChart";
-import Instructors from "../../components/Instructors/Instructors";
+import SemiDonutChart from "../../components/Charts/SemiDonutChart"; // Updated SemiDonutChart component
 import SWOTCard from "../../components/SWOTAnalysis/SWOTCard";
 import RecommendationsCard from "../../components/Recommendations/RecommendationsCard";
 import HeatmapChart from "../../components/Heatmap/HeatmapChart";
@@ -18,6 +18,12 @@ const Dashboard = () => {
   const handleTabChange = (event, newValue) => {
     setSelectedSubject(newValue);
   };
+
+  const semiDonutData = [
+    { subject: "Biology", freshMistakes: 35, oldMistakes: 65 },
+    { subject: "Physics", freshMistakes: 45, oldMistakes: 55 },
+    { subject: "Chemistry", freshMistakes: 40, oldMistakes: 60 },
+  ];
 
   return (
     <div style={{ display: "flex", height: "100vh", backgroundColor: "#dee1e7" }}>
@@ -46,6 +52,36 @@ const Dashboard = () => {
               ))}
             </div>
           </div>
+
+          {/* Semi-Donut Charts */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: 3,
+              marginTop: "24px",
+            }}
+          >
+            {semiDonutData.map((data, index) => (
+              <Box
+                key={index}
+                sx={{
+                  width: "30%",
+                  backgroundColor: "#ffffff",
+                  borderRadius: "8px",
+                  padding: 3,
+                  boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+                  textAlign: "center",
+                }}
+              >
+                <SemiDonutChart
+                  subject={data.subject}
+                  freshMistakes={data.freshMistakes}
+                  oldMistakes={data.oldMistakes}
+                />
+              </Box>
+            ))}
+          </Box>
 
           {/* AI-Powered Student Dashboard */}
           <Box sx={{ padding: 3, backgroundColor: "#f5f7fa", marginTop: "32px" }}>
@@ -78,6 +114,7 @@ const Dashboard = () => {
             {/* Heatmap Chart */}
             <HeatmapChart data={heatmapData} />
           </Box>
+
           {/* Progress Chart */}
           <div style={{ marginTop: "24px" }}>
             <ProgressChart data={monthlyProgressData} />
