@@ -47,16 +47,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Progress Chart */}
-          <div style={{ marginTop: "24px" }}>
-            <ProgressChart data={monthlyProgressData} />
-          </div>
-
-          {/* Instructors */}
-          <div style={{ marginTop: "24px" }}>
-            <Instructors />
-          </div>
-
           {/* AI-Powered Student Dashboard */}
           <Box sx={{ padding: 3, backgroundColor: "#f5f7fa", marginTop: "32px" }}>
             <Typography variant="h4" sx={{ textAlign: "center", mb: 4, color: "#1976d2", fontWeight: "bold" }}>
@@ -88,6 +78,10 @@ const Dashboard = () => {
             {/* Heatmap Chart */}
             <HeatmapChart data={heatmapData} />
           </Box>
+          {/* Progress Chart */}
+          <div style={{ marginTop: "24px" }}>
+            <ProgressChart data={monthlyProgressData} />
+          </div>
         </div>
       </div>
     </div>
