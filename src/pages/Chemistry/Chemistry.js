@@ -2,8 +2,30 @@ import React from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Header from "../../components/Header/Header";
 import { Box, Typography } from "@mui/material";
+import HeatmapBio from "../../components/Heatmap/HeatmapChemistry";
 
-const Biology = () => {
+const chemistryData = Array.from({ length: 25 }, (_, index) => ({
+  "Atomic Structure": Math.floor(Math.random() * 100),
+  "Periodic Table": Math.floor(Math.random() * 100),
+  "Chemical Bonding": Math.floor(Math.random() * 100),
+  "Thermodynamics": Math.floor(Math.random() * 100),
+  "Chemical Kinetics": Math.floor(Math.random() * 100),
+  "Organic Chemistry": Math.floor(Math.random() * 100),
+  "Inorganic Chemistry": Math.floor(Math.random() * 100),
+}));
+
+const chemistryChapters = [
+  "Atomic Structure",
+  "Periodic Table",
+  "Chemical Bonding",
+  "Thermodynamics",
+  "Chemical Kinetics",
+  "Organic Chemistry",
+  "Inorganic Chemistry",
+];
+
+
+const Chemistry = () => {
   return (
     <div style={{ display: "flex", height: "100vh", backgroundColor: "#dee1e7" }}>
       {/* Sidebar */}
@@ -21,10 +43,10 @@ const Biology = () => {
               fontWeight: "bold",
             }}
           >
-            Biology
+            Chemistry
           </Typography>
 
-          {/* Content Area */}
+          {/* Heatmap Section */}
           <Box
             sx={{
               padding: 3,
@@ -41,20 +63,11 @@ const Biology = () => {
                 fontWeight: "bold",
               }}
             >
-              Biology Insights
+              Chemistry Performance Heatmap
             </Typography>
 
-            <Typography
-              variant="body1"
-              sx={{
-                color: "#64748B",
-              }}
-            >
-              Welcome to the Biology page! Explore various insights and analysis
-              related to the field of Biology. Charts and detailed information
-              will be added here to give a comprehensive understanding of the
-              subject.
-            </Typography>
+            {/* Render Heatmap */}
+            <HeatmapBio data={chemistryData} chapters={chemistryChapters} />
           </Box>
         </div>
       </div>
@@ -62,4 +75,4 @@ const Biology = () => {
   );
 };
 
-export default Biology;
+export default Chemistry;

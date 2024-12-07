@@ -2,6 +2,27 @@ import React from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Header from "../../components/Header/Header";
 import { Box, Typography } from "@mui/material";
+import HeatmapBio from "../../components/Heatmap/HeatmapBio";
+
+const biologyData = Array.from({ length: 25 }, (_, index) => ({
+  "Cell Structure": Math.floor(Math.random() * 100),
+  "Genetics": Math.floor(Math.random() * 100),
+  "Evolution": Math.floor(Math.random() * 100),
+  "Ecosystems": Math.floor(Math.random() * 100),
+  "Plant Biology": Math.floor(Math.random() * 100),
+  "Animal Biology": Math.floor(Math.random() * 100),
+  "Human Anatomy": Math.floor(Math.random() * 100),
+}));
+
+const biologyChapters = [
+  "Cell Structure",
+  "Genetics",
+  "Evolution",
+  "Ecosystems",
+  "Plant Biology",
+  "Animal Biology",
+  "Human Anatomy",
+];
 
 const Biology = () => {
   return (
@@ -24,7 +45,7 @@ const Biology = () => {
             Biology
           </Typography>
 
-          {/* Content Area */}
+          {/* Heatmap Section */}
           <Box
             sx={{
               padding: 3,
@@ -41,20 +62,11 @@ const Biology = () => {
                 fontWeight: "bold",
               }}
             >
-              Biology Insights
+              Biology Performance Heatmap
             </Typography>
 
-            <Typography
-              variant="body1"
-              sx={{
-                color: "#64748B",
-              }}
-            >
-              Welcome to the Biology page! Explore various insights and analysis
-              related to the field of Biology. Charts and detailed information
-              will be added here to give a comprehensive understanding of the
-              subject.
-            </Typography>
+            {/* Render Heatmap */}
+            <HeatmapBio data={biologyData} chapters={biologyChapters} />
           </Box>
         </div>
       </div>
