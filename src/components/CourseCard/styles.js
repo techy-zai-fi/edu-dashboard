@@ -23,7 +23,7 @@ export const Card = styled.div`
   p {
     margin: 0;
     font-size: 14px;
-    color: ${props => props.theme.colors.text.secondary};
+    color:#747473;
   }
 `;
 

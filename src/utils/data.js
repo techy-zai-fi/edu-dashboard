@@ -48,19 +48,19 @@ export const monthlyProgressData = [
 export const swotData = {
   Physics: {
     strengths: ["Strong Mechanics foundation", "Accurate problem-solving skills", "Quick in calculations"],
-    weaknesses: ["Struggles with time management", "Weak in Thermodynamics"],
+    challenges: ["Struggles with time management", "Weak in Thermodynamics"],
     opportunities: ["Master advanced Mechanics topics", "Participate in Physics Olympiads"],
     threats: ["Inconsistent scores under time pressure", "Competition from peers in core subjects"],
   },
   Chemistry: {
     strengths: ["Strong grasp of Periodic Table trends", "High accuracy in Organic Chemistry"],
-    weaknesses: ["Weak practical skills", "Confusion in reaction mechanisms"],
+    challenges: ["Weak practical skills", "Confusion in reaction mechanisms"],
     opportunities: ["Focus on lab experiments", "Participate in Chemistry workshops"],
     threats: ["Low confidence in competitive exams", "Over-reliance on theoretical learning"],
   },
   Biology: {
     strengths: ["Excellent knowledge of Genetics", "High diagram accuracy", "Quick understanding of Ecology"],
-    weaknesses: ["Weak in Plant Physiology", "Tends to skip Anatomy"],
+    challenges: ["Weak in Plant Physiology", "Tends to skip Anatomy"],
     opportunities: ["Focus on detailed Anatomy studies", "Leverage Genetics for research projects"],
     threats: ["Dependency on rote learning", "Difficulties in handling large syllabus"],
   },

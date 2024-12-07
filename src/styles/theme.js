@@ -9,7 +9,7 @@ export const theme = {
     white: '#FFFFFF',
     text: {
       primary: '#2D3748',
-      secondary: '#64748B'
+      secondary: '#ffffff'
     }
   },
   gradients: {

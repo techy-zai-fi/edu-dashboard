@@ -72,7 +72,7 @@ const Dashboard = () => {
 
             {/* SWOT Analysis */}
             <Grid container spacing={3} sx={{ mb: 4 }}>
-              {["strengths", "weaknesses", "opportunities", "threats"].map((type) => (
+              {["strengths", "challenges", "opportunities", "threats"].map((type) => (
                 <Grid item xs={12} sm={6} key={type}>
                   <SWOTCard type={type} data={swotData[selectedSubject][type]} />
                 </Grid>

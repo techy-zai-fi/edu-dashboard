@@ -5,7 +5,7 @@ export const HeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  background: #dee1e7;
+  background:#A6AEBF;
   border-bottom: 1px solid #eef0f7;
   width: 100%;
   box-sizing: border-box;

@@ -8,15 +8,34 @@ const getHeatmapColor = (value) => {
 };
 
 const HeatmapChart = ({ data }) => (
-  <Box sx={{ display: "grid", gridTemplateColumns: "repeat(26, 1fr)", gap: "5px" }}>
-    <Box />
+  <Box sx={{ display: "grid", gridTemplateColumns: `repeat(${data.length + 1}, 1fr)`, gap: "5px" }}>
+    {/* First row: Top-left corner with "Test" and test numbers */}
+    <Typography
+      sx={{
+        fontWeight: "bold",
+        textAlign: "center",
+        padding: "5px",
+      }}
+    >
+      Test
+    </Typography>
     {data.map((_, index) => (
-      <Typography key={`test-header-${index}`} sx={{ textAlign: "center", fontWeight: "bold", padding: "5px" }}>
-        Test {index + 1}
+      <Typography
+        key={`test-header-${index}`}
+        sx={{
+          textAlign: "center",
+          fontWeight: "bold",
+          padding: "5px",
+        }}
+      >
+        {index + 1}
       </Typography>
     ))}
+
+    {/* Render rows for each subject */}
     {["Physics", "Chemistry", "Biology"].map((subject, rowIndex) => (
       <React.Fragment key={`row-${rowIndex}`}>
+        {/* First column with subject names */}
         <Typography
           sx={{
             fontWeight: "bold",
@@ -29,6 +48,8 @@ const HeatmapChart = ({ data }) => (
         >
           {subject}
         </Typography>
+
+        {/* Heatmap cells for each test */}
         {data.map((row, columnIndex) => {
           const value = row[subject];
           return (
@@ -41,13 +62,9 @@ const HeatmapChart = ({ data }) => (
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "14px",
-                color: value >= 75 ? "#fff" : "#000",
                 border: "1px solid #ddd",
               }}
-            >
-              {value}
-            </Box>
+            ></Box>
           );
         })}
       </React.Fragment>
