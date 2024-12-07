@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Header from "../../components/Header/Header";
 import CourseCard from "../../components/CourseCard/CourseCard";
@@ -14,11 +15,16 @@ import { Box, Grid, Typography } from "@mui/material";
 
 const Dashboard = () => {
   const [selectedSubject, setSelectedSubject] = useState("Physics");
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleTabChange = (event, newValue) => {
     setSelectedSubject(newValue);
   };
-
+  const handleCourseClick = (courseTitle) => {
+    // Navigate to the specific course page
+    const route = courseTitle.toLowerCase(); // Convert title to lowercase for routing
+    navigate(`/${route}`); // e.g., /biology, /physics, /chemistry
+  };
   return (
     <div style={{ display: "flex", height: "100vh", backgroundColor: "#dee1e7" }}>
       {/* Sidebar */}
@@ -42,6 +48,7 @@ const Dashboard = () => {
                   color={course.color}
                   backgroundColor={course.backgroundColor}
                   icon={course.icon}
+                  onClick={() => handleCourseClick(course.title)} // Pass click handler
                 />
               ))}
             </div>
@@ -49,7 +56,15 @@ const Dashboard = () => {
 
           {/* AI-Powered Student Dashboard */}
           <Box sx={{ padding: 3, backgroundColor: "#f5f7fa", marginTop: "32px" }}>
-            <Typography variant="h4" sx={{ textAlign: "center", mb: 4, color: "#1976d2", fontWeight: "bold" }}>
+            <Typography
+              variant="h4"
+              sx={{
+                textAlign: "center",
+                mb: 4,
+                color: "#1976d2",
+                fontWeight: "bold",
+              }}
+            >
               AI-Powered Student Dashboard
             </Typography>
 
