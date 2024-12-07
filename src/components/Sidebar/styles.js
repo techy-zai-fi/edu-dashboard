@@ -39,5 +39,6 @@ export const MenuItem = styled.div`
 
   &:hover {
     background: ${props => props.theme.colors.grey};
+    color: #0094ff; /* Blue color on hover */
   }
 `;

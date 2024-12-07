@@ -41,7 +41,7 @@ const SemiDonutChart = ({ subject, freshMistakes, oldMistakes }) => {
       </div>
       <div className="flex justify-between w-full mt-4 text-sm text-gray-600 font-medium">
         <span>Fresh: {freshMistakes}%</span>
-        <span>Old: {oldMistakes}%</span>
+        <span>     Old: {oldMistakes}%</span>
       </div>
     </div>
   );
